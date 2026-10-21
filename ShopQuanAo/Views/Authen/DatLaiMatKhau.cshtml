@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "DatLaiMatKhau";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+
+<div class="breadcrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <a href="@Url.Action("Index","Home")">
+                        <i class="fa fa-home"></i> Trang chủ
+                    </a>
+                    <span>Đặt lại mật khẩu</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="checkout-section spad">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="checkout-form">
+                    <h4>Đặt lại mật khẩu</h4>
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label>Mật khẩu mới <span>*</span></label>
+                                <input type="password"
+                                       name="MatKhauMoi"
+                                       placeholder="Nhập mật khẩu mới"
+                                       required />
+                            </div>
+
+                            <div class="col-lg-12">
+                                <label>Xác nhận mật khẩu <span>*</span></label>
+                                <input type="password"
+                                       name="XacNhanMatKhau"
+                                       placeholder="Nhập lại mật khẩu"
+                                       required />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="site-btn place-btn">
+                            Đổi mật khẩu
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

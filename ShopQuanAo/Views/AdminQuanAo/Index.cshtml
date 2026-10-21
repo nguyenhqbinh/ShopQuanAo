@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ảnh</th>
+            <th>Tên</th>
+            <th>Giá</th>
+            <th>Số lượng</th>
+            <th>Thể loại</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sp in Model)
+        {
+            <tr>
+                <td>
+                   <img src="@Url.Content("~/Content/img/QuanAo/" + sp.HinhAnh)"
+                        style="width:80px"
+                        onerror="this.src='/Content/img/no-image.png'" />
+                </td>
+                <td>@sp.TenQuanAo</td>
+                <td>@sp.Gia.ToString("N0")</td>
+                <td>@sp.SoLuongTon</td>
+                <td>@sp.TheLoai.TenTheLoai</td>
+                <td>
+                    <a class="btn btn-sm btn-warning"
+                       href="@Url.Action("Edit", new { id = sp.MaQuanAo })">
+                        Sửa
+                    </a>
+
+                    <a class="btn btn-sm btn-danger"
+                       href="@Url.Action("Delete", new { id = sp.MaQuanAo })"
+                       onclick="return confirm('Xóa sản phẩm này?')">
+                        Xóa
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

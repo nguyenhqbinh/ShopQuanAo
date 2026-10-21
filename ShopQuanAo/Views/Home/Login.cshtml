@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Layouts/_Layout_Home.cshtml";
+}
+
+
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <a href="#"><i class="fa fa-home"></i> Home</a>
+                    <span>Đăng nhập</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Section Begin -->
+<div class="register-login-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                <div class="login-form">
+                    <h2>Đăng Nhập</h2>
+                    <form method="post" asp-controller="Home" asp-action="Login">
+                        <div class="group-input">
+                            <label for="username">Tên đăng nhập hoặc email *</label>
+                            <input type="text" id="username" name="username" required />
+                        </div>
+                        <div class="group-input">
+                            <label for="pass">Mật khẩu *</label>
+                            <input type="password" id="pass" name="password" required />
+                        </div>
+
+                        <div class="group-input gi-check">
+                            <div class="gi-more">
+                                <label for="save-pass">
+                                    Lưu mật khẩu
+                                    <input type="checkbox" id="save-pass" name="rememberMe" />
+                                    <span class="checkmark"></span>
+                                </label>
+                                <a href="#" class="forget-pass">Quên mật khẩu</a>
+                            </div>
+                        </div>
+                        <button type="submit" class="site-btn login-btn">Đăng nhập</button>
+                    </form>
+                    <div class="switch-login">
+                        <a href=@Url.Action("Register","Home") class="or-login">Hoặc tạo tài khoản</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var msg = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["LoginMessage"]));
+            if (msg) {
+                alert(msg);
+            }
+        });
+    </script>
+}

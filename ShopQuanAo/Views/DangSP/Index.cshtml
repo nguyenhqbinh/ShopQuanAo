@@ -1,0 +1,140 @@
+﻿@model ShopQuanAo.Models.QuanAo
+
+@{
+    ViewBag.Title = "Đăng Sản Phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Trang chủ</a>
+                    <span>Đăng sản phẩm</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Section Begin -->
+<div class="register-login-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="register-form">
+                    <h2>Đăng Sản Phẩm</h2>
+
+                    @if (ViewBag.SuccessMessage != null)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @ViewBag.SuccessMessage
+                        </div>
+                    }
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+
+                    <form method="post" action="@Url.Action("Index", "DangSP")" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+
+                        <div class="group-input">
+                            <label for="TenQuanAo">Tên quần áo *</label>
+                            <input type="text" id="TenQuanAo" name="TenQuanAo" value="@(Model?.TenQuanAo)" required maxlength="255" />
+                            @Html.ValidationMessageFor(m => m.TenQuanAo, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="group-input">
+                            <label for="MoTa">Mô tả</label>
+                            <textarea id="MoTa" name="MoTa" rows="5" class="form-control">@(Model?.MoTa)</textarea>
+                            @Html.ValidationMessageFor(m => m.MoTa, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="group-input">
+                                    <label for="Gia">Giá (VNĐ) *</label>
+                                    <input type="number" id="Gia" name="Gia" value="@(Model?.Gia)" step="0.01" min="0" required />
+                                    @Html.ValidationMessageFor(m => m.Gia, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="group-input">
+                                    <label for="SoLuongTon">Số lượng tồn *</label>
+                                    <input type="number" id="SoLuongTon" name="SoLuongTon" value="@(Model?.SoLuongTon)" min="0" required />
+                                    @Html.ValidationMessageFor(m => m.SoLuongTon, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="group-input">
+                                    <label for="MaTheLoai">Thể loại *</label>
+                                    @Html.DropDownListFor(m => m.MaTheLoai, (SelectList)ViewBag.MaTheLoai, "-- Chọn thể loại --", new { @class = "form-control", required = "required" })
+                                    @Html.ValidationMessageFor(m => m.MaTheLoai, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="group-input">
+                                    <label for="GioiTinh">Giới tính *</label>
+                                    <select id="GioiTinh" name="GioiTinh" class="form-control" required>
+                                        <option value="">-- Chọn giới tính --</option>
+                                        <option value="Nam" @(Model?.GioiTinh == "Nam" ? "selected" : "")>Nam</option>
+                                        <option value="Nữ" @(Model?.GioiTinh == "Nữ" ? "selected" : "")>Nữ</option>
+                                    </select>
+                                    @Html.ValidationMessageFor(m => m.GioiTinh, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="group-input">
+                            <label for="HinhAnhFile">Hình ảnh *</label>
+                            <input type="file" id="HinhAnhFile" name="HinhAnhFile" accept="image/*" required />
+                            <small class="form-text text-muted">Chỉ chấp nhận file ảnh: .jpg, .jpeg, .png, .gif</small>
+                            @if (ViewData.ModelState["HinhAnhFile"] != null && ViewData.ModelState["HinhAnhFile"].Errors.Count > 0)
+                            {
+                                <span class="text-danger">@ViewData.ModelState["HinhAnhFile"].Errors[0].ErrorMessage</span>
+                            }
+                            @if (!string.IsNullOrEmpty(Model?.HinhAnh))
+                            {
+                                <div class="mt-2">
+                                    <img src="~/Content/img/@Model.HinhAnh" alt="Hình ảnh hiện tại" style="max-width: 200px; max-height: 200px;" />
+                                </div>
+                            }
+                        </div>
+
+                        <button type="submit" class="site-btn register-btn">Đăng sản phẩm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/ckeditor/ckeditor.js"></script>
+
+<script>
+    CKEDITOR.replace('MoTa', {
+        height: 250,
+        removeButtons: '',
+        toolbarGroups: [
+            { name: 'clipboard', groups: ['clipboard', 'undo'] },
+            { name: 'editing', groups: ['find', 'selection'] },
+            { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+            { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align'] },
+            { name: 'styles' },
+            { name: 'colors' },
+            { name: 'insert' },
+            { name: 'links' },
+            { name: 'tools' }
+        ]
+    });
+</script>

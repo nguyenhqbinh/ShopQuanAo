@@ -1,0 +1,174 @@
+﻿@model List<ShopQuanAo.Models.GioHangItem>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Action("Header", "Home")
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text product-more">
+                    <a href="./home.html"><i class="fa fa-home"></i> Trang chủ</a>
+                    <a href="./shop.html">Cửa hàng</a>
+                    <span>Giỏ Hàng</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Section Begin -->
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.AntiForgeryToken()
+                <div class="cart-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Hình Ảnh</th>
+                                <th class="p-name">Tên sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Tổng tiền</th>
+                                <th><i class="ti-close"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="cart-pic">
+                                            <img src="~/Content/img/QuanAo/@item.HinhAnh" width="150" />
+                                        </td>
+                                        <td class="cart-title">
+                                            <h5>@item.TenQuanAo</h5>
+                                        </td>
+                                        <td class="p-price">
+                                            <span class="price-value" data-price="@item.Gia">@item.Gia.ToString("N0") ₫</span>
+                                        </td>
+                                        <td class="qua-col">
+                                            <div class="pro-qty" data-id="@item.MaQuanAo">
+                                                <input type="text" class="qty-input" value="@item.SoLuong" readonly />
+                                            </div>
+                                        </td>
+                                        <td class="total-price">
+                                            <span class="line-total" data-id="@item.MaQuanAo">@item.ThanhTien.ToString("N0") ₫</span>
+                                        </td>
+                                        <td class="close-td">
+                                            <a href="#"><i class="ti-close"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        <strong>Giỏ hàng trống</strong>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="cart-buttons">
+                            <a href="#" class="primary-btn continue-shop">Tiếp tục mua sắm</a>
+                            <a href="#" class="primary-btn up-cart">Cập nhật giỏ hàng</a>
+                        </div>
+                        <div class="discount-coupon">
+                            <h6>Mã giảm giá</h6>
+                            <form action="#" class="coupon-form">
+                                <input type="text" placeholder="Nhập mã của bạn">
+                                <button type="submit" class="site-btn coupon-btn">Áp dụng</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 offset-lg-4">
+                        <div class="proceed-checkout">
+                            <ul>
+                                <li class="subtotal">
+                                    Tổng phụ
+                                    <span id="subtotal-value">@Model.Sum(x => x.ThanhTien).ToString("N0") ₫</span>
+                                </li>
+                                <li class="cart-total">
+                                    Tổng cộng
+                                    <span id="total-value">@Model.Sum(x => x.ThanhTien).ToString("N0") ₫</span>
+                                </li>
+                            </ul>
+                            <a href="@Url.Action("Index","CheckOut")" class="proceed-btn">Thanh toán</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shopping Cart Section End -->
+@Html.Action("Footer", "Home")
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function formatCurrency(value) {
+                return value.toLocaleString('vi-VN') + ' ₫';
+            }
+
+            function updateTotals(lineTotal, cartTotal, id) {
+                if (id) {
+                    $('.line-total[data-id="' + id + '"]').text(formatCurrency(lineTotal));
+                }
+                $('#subtotal-value').text(formatCurrency(cartTotal));
+                $('#total-value').text(formatCurrency(cartTotal));
+            }
+
+            function sendUpdate(productId, quantity) {
+                $.ajax({
+                    url: '@Url.Action("UpdateQuantity", "GioHang")',
+                    type: 'POST',
+                    data: {
+                        id: productId,
+                        quantity: quantity,
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (resp) {
+                        if (resp.success) {
+                            // cập nhật input theo quantity trả về (có thể bị giới hạn bởi tồn kho)
+                            var qtyInput = $('.pro-qty[data-id="' + productId + '"] .qty-input');
+                            qtyInput.val(resp.quantity);
+                            updateTotals(resp.lineTotal, resp.cartTotal, productId);
+                        } else {
+                            alert(resp.message || 'Không thể cập nhật số lượng');
+                        }
+                    },
+                    error: function () {
+                        alert('Có lỗi xảy ra khi cập nhật số lượng');
+                    }
+                });
+            }
+
+            $('.qtybtn').on('click', function () {
+                var parent = $(this).closest('.pro-qty');
+                var productId = parent.data('id');
+                var input = parent.find('.qty-input');
+                var current = parseInt(input.val()) || 1;
+                if ($(this).hasClass('inc')) {
+                    current += 1;
+                } else {
+                    current = Math.max(1, current - 1);
+                }
+                sendUpdate(productId, current);
+            });
+        });
+    </script>
+}

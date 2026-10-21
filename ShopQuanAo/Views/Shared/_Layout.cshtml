@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    @*<base href="~/" />*@
+    <meta charset="UTF-8">
+    <meta name="description" content="Fashi Template">
+    <meta name="keywords" content="Fashi, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fashi</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/content/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/content/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/content/css/themify-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/content/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/content/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/content/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/content/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/content/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/content/css/style.css" type="text/css">
+    <link href="~/content/~/content/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+
+    <div>
+        @RenderBody()
+    </div>
+    @* @if (Session["VaiTro"]?.ToString() == "Admin")
+        {
+            <li>
+                <a href="@Url.Action("Index","Admin")">Quản lý tài khoản</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","AdminQuanAo")">Quản lý sản phẩm</a>
+            </li>
+        }
+        @if (Session["VaiTro"] != null && Session["VaiTro"].ToString() == "Admin")
+        {
+            <a href="@Url.Action("Index", "DangSP")">Đăng sản phẩm</a>
+        }*@
+    <!-- Js Plugins -->
+    <script src="~/content/js/jquery-3.3.1.min.js"></script>
+    <script src="~/content/js/bootstrap.min.js"></script>
+    <script src="~/content/js/jquery-ui.min.js"></script>
+    <script src="~/content/js/jquery.countdown.min.js"></script>
+    <script src="~/content/js/jquery.nice-select.min.js"></script>
+    <script src="~/content/js/jquery.zoom.min.js"></script>
+    <script src="~/content/js/jquery.dd.min.js"></script>
+    <script src="~/content/js/jquery.slicknav.js"></script>
+    <script src="~/content/js/owl.carousel.min.js"></script>
+    <script src="~/content/js/main.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

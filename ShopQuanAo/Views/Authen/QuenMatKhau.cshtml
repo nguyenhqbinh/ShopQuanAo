@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "QuenMatKhau";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Breadcrumb Section Begin -->
+<div class="breadcrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <a href="@Url.Action("Index","Home")">
+                        <i class="fa fa-home"></i> Trang chủ
+                    </a>
+                    <span>Quên mật khẩu</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Section End -->
+<!-- Login Section Begin -->
+<section class="checkout-section spad">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="checkout-form">
+                    <h4>Quên mật khẩu</h4>
+
+                    <p style="margin-bottom:20px">
+                        Nhập email đã đăng ký để đặt lại mật khẩu
+                    </p>
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label>Email <span>*</span></label>
+                                <input type="email"
+                                       name="Email"
+                                       placeholder="Nhập email của bạn"
+                                       required />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="site-btn place-btn">
+                            Xác nhận
+                        </button>
+
+                        <div style="margin-top:15px">
+                            <a href="@Url.Action("DangNhap","Authen")">
+                                ← Quay lại đăng nhập
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Login Section End -->

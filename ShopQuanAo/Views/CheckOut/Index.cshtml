@@ -1,0 +1,280 @@
+﻿@model ShopQuanAo.Models.KhachHang
+@using ShopQuanAo.Controllers
+
+@{
+    ViewBag.Title = "Thanh Toán";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var cartItems = ViewBag.CartItems as List<CartItem>;
+    var tongTien = ViewBag.TongTien as decimal? ?? 0;
+}
+
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Trang chủ</a>
+                    <span>Thanh toán</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Checkout Section Begin -->
+<section class="checkout-section spad">
+    <div class="container">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        @if (cartItems != null && cartItems.Count > 0)
+        {
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="checkout-title">Đơn hàng của bạn</h4>
+                </div>
+            </div>
+            
+            <div class="row">
+                            <div class="col-lg-12">
+                    <div class="cart-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="p-name">Sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in cartItems)
+                                {
+                                    <tr>
+                                        <td class="cart-title first-row">
+                                            <h5>
+                                                @if (!string.IsNullOrEmpty(item.HinhAnh))
+                                                {
+                                                    <img src="~/Content/img/QuanAo/@item.HinhAnh" alt="@item.TenQuanAo" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px; display: inline-block; vertical-align: middle;" />
+                                                }
+                                                @item.TenQuanAo
+                                            </h5>
+                                        </td>
+                                        <td class="p-price first-row">@string.Format("{0:N0}", item.Gia) đ</td>
+                                        <td class="qua-col first-row">@item.SoLuong</td>
+                                        <td class="total-price first-row">@string.Format("{0:N0}", item.ThanhTien) đ</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="checkout-content">
+                        <div class="total-price" style="text-align: right; margin-bottom: 30px;">
+                            <span style="font-size: 18px; font-weight: 700;">Tổng tiền: </span>
+                            <span style="font-size: 24px; color: #e7ab3c; font-weight: 700;">@string.Format("{0:N0}", tongTien) đ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h4 class="checkout-title">Thông tin giao hàng</h4>
+                    <form method="post" action="@Url.Action("Index", "CheckOut")" class="checkout-form">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="group-input">
+                                    <label for="HoTenKhachHang">Họ và tên *</label>
+                                    <input type="text" id="HoTenKhachHang" name="HoTenKhachHang" value="@(Model?.HoTenKhachHang)" required />
+                                    @Html.ValidationMessageFor(m => m.HoTenKhachHang, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="group-input">
+                                    <label for="Email">Email</label>
+                                    <input type="email" id="Email" name="Email" value="@(Model?.Email)" />
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="group-input">
+                                    <label for="DienThoai">Điện thoại *</label>
+                                    <input type="text" id="DienThoai" name="DienThoai" value="@(Model?.DienThoai)" required />
+                                    @Html.ValidationMessageFor(m => m.DienThoai, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="group-input">
+                                    <label for="DiaChi">Địa chỉ giao hàng *</label>
+                                    <textarea id="DiaChi" name="DiaChi" rows="3" required>@(Model?.DiaChi)</textarea>
+                                    @Html.ValidationMessageFor(m => m.DiaChi, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="site-btn register-btn">Đặt hàng</button>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="alert alert-info" role="alert">
+                        <h4>Giỏ hàng của bạn đang trống!</h4>
+                        <p>Vui lòng thêm sản phẩm vào giỏ hàng trước khi thanh toán.</p>
+                        <a href="@Url.Action("Index", "Home")" class="site-btn">Tiếp tục mua sắm</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<style>
+    .checkout-section {
+        padding-top: 80px;
+        padding-bottom: 60px;
+    }
+
+    .checkout-title {
+        font-size: 24px;
+        font-family: 'Muli', sans-serif;
+        color: #252525;
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+
+    .checkout-content {
+        background-color: #f5f5f5;
+        padding: 30px;
+        border-radius: 5px;
+    }
+
+    .group-input {
+        margin-bottom: 25px;
+    }
+
+    .group-input label {
+        display: block;
+        font-size: 16px;
+        font-family: 'Muli', sans-serif;
+        color: #252525;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .group-input input[type="text"],
+    .group-input input[type="email"],
+    .group-input textarea {
+        width: 100%;
+        height: 50px;
+        border: 1px solid #ebebeb;
+        padding-left: 20px;
+        font-size: 16px;
+        font-family: 'Muli', sans-serif;
+        color: #252525;
+        border-radius: 4px;
+    }
+
+    .group-input textarea {
+        height: auto;
+        padding-top: 15px;
+        resize: vertical;
+    }
+
+    .site-btn {
+        font-size: 14px;
+        font-family: 'Muli', sans-serif;
+        color: #ffffff;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-block;
+        padding: 14px 30px;
+        background: #e7ab3c;
+        border: none;
+        cursor: pointer;
+    }
+
+    .site-btn:hover {
+        background: #d89a2f;
+    }
+
+    .register-btn {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .cart-table table {
+        width: 100%;
+        border: 1px solid #ebebeb;
+        margin-bottom: 30px;
+    }
+
+    .cart-table table thead tr th {
+        font-size: 16px;
+        font-family: 'Muli', sans-serif;
+        color: #252525;
+        font-weight: 700;
+        border-bottom: 1px solid #ebebeb;
+        text-align: center;
+        padding: 18px 0 19px;
+        text-transform: uppercase;
+    }
+
+    .cart-table table thead tr th.p-name {
+        text-align: left;
+        padding-left: 30px;
+    }
+
+    .cart-table table tbody tr td {
+        text-align: center;
+        padding: 20px 0;
+        border-bottom: 1px solid #ebebeb;
+    }
+
+    .cart-table table tbody tr td.cart-title {
+        text-align: left;
+        padding-left: 30px;
+    }
+
+    .cart-table table tbody tr td.cart-title h5 {
+        color: #252525;
+        font-size: 16px;
+        font-family: 'Muli', sans-serif;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .cart-table table tbody tr td.p-price,
+    .cart-table table tbody tr td.total-price {
+        color: #e7ab3c;
+        font-size: 16px;
+        font-family: 'Muli', sans-serif;
+        font-weight: 700;
+    }
+    
+    .cart-table table tbody tr td {
+        font-family: 'Muli', sans-serif;
+    }
+</style>

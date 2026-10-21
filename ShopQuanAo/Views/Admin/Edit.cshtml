@@ -1,0 +1,102 @@
+﻿@model ShopQuanAo.Models.User
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .btn-group-fashi {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+        .btn-group-fashi .site-btn {
+            width: 100%;
+        }
+</style>
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <a href="@Url.Action("Index","Home")">
+                        <i class="fa fa-home"></i> Trang chủ
+                    </a>
+                    <a href="@Url.Action("Index","Admin")">Quản lý tài khoản</a>
+                    <span>Chỉnh sửa</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Section End -->
+
+<section class="register-login-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                <div class="register-form">
+                    <h2>Chỉnh sửa tài khoản</h2>
+
+                    @using (Html.BeginForm("Edit", "Admin", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.MaUser)
+
+                        <div class="group-input">
+                            <label>Tên đăng nhập</label>
+                            <input type="text" class="form-control"
+                                   value="@Model.TenDangNhap" readonly />
+                        </div>
+
+                        <div class="group-input">
+                            <label>Họ và tên *</label>
+                            @Html.TextBoxFor(m => m.HoTen,
+                                new { @class = "form-control", required = "required" })
+                        </div>
+
+                        <div class="group-input">
+                            <label>Email</label>
+                            @Html.TextBoxFor(m => m.Email,
+                                new { @class = "form-control", type = "email" })
+                        </div>
+
+                        <div class="group-input">
+                            <label>Điện thoại</label>
+                            @Html.TextBoxFor(m => m.DienThoai,
+                                new { @class = "form-control" })
+                        </div>
+
+                        <div class="group-input">
+                            <label>Vai trò *</label>
+                            <select name="VaiTro" class="form-control">
+                                <option value="Admin" @(Model.VaiTro == "Admin" ? "selected" : "")>
+                                    Admin
+                                </option>
+                                <option value="KhachHang" @(Model.VaiTro == "KhachHang" ? "selected" : "")>
+                                    Khách hàng
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="group-input text-center">
+                            <div class="btn-group-fashi">
+                                <button type="submit" class="site-btn register-btn">
+                                    Cập nhật
+                                </button>
+
+                                <a href="@Url.Action("Index","Admin")"
+                                   class="site-btn login-btn text-center">
+                                    Hủy
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

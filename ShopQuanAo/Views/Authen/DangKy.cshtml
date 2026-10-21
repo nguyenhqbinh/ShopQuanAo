@@ -1,0 +1,96 @@
+﻿@model ShopQuanAo.Models.User
+
+@{
+    ViewBag.Title = "Đăng Ký";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Trang chủ</a>
+                    <span>Đăng ký</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Section Begin -->
+<div class="register-login-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                <div class="register-form">
+                    <h2>Đăng Ký</h2>
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+                    <form method="post" action="@Url.Action("DangKy", "Authen")">
+                        @Html.AntiForgeryToken()
+                        <div class="group-input">
+                            <label for="TenDangNhap">Tên đăng nhập *</label>
+                            <input type="text" id="TenDangNhap" name="TenDangNhap" value="@(Model?.TenDangNhap)" required />
+                        </div>
+                        <div class="group-input">
+                            <label for="HoTen">Họ và tên *</label>
+                            <input type="text" id="HoTen" name="HoTen" value="@(Model?.HoTen)" required />
+                        </div>
+                        <div class="group-input">
+                            <label for="Email">Email</label>
+                            <input type="email" id="Email" name="Email" value="@(Model?.Email)" />
+                        </div>
+                        <div class="group-input">
+                            <label for="DienThoai">Điện thoại</label>
+                            <input type="text" id="DienThoai" name="DienThoai" value="@(Model?.DienThoai)" />
+                        </div>
+                        <div class="group-input">
+                            <label for="MatKhau">Mật khẩu *</label>
+                            <input type="password" id="MatKhau" name="MatKhau" required />
+                        </div>
+                        <div class="group-input">
+                            <label for="XacNhanMatKhau">Xác nhận mật khẩu *</label>
+                            <input type="password" id="XacNhanMatKhau" name="XacNhanMatKhau" required />
+                        </div>
+                        <div class="group-input">
+                            <label for="CaptchaAnswer">Mã xác nhận *</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="font-size: 20px; font-weight: bold; padding: 10px 15px; background-color: #f5f5f5; border: 1px solid #ebebeb; border-radius: 5px; min-width: 100px; text-align: center;">
+                                    @ViewBag.CaptchaQuestion
+                                </div>
+                                <input type="text" id="CaptchaAnswer" name="CaptchaAnswer" style="flex: 1; max-width: 150px;" placeholder="Nhập kết quả" required />
+                                <button type="button" onclick="refreshCaptcha()" style="padding: 10px 15px; background-color: #e7ab3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                    <i class="fa fa-refresh"></i> Làm mới
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="site-btn register-btn">Đăng ký</button>
+                    </form>
+                    <div class="switch-login">
+                        <a href="@Url.Action("DangNhap", "Authen")" class="or-login">Hoặc đăng nhập</a>
+                    </div>
+                    <div class="switch-login" style="margin-top:10px">
+                        <a href="@Url.Action("QuenMatKhau", "Authen")" class="or-login">
+                            Quên mật khẩu?
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function refreshCaptcha() {
+            // Reload trang để tạo captcha mới
+            window.location.reload();
+        }
+    </script>
+}

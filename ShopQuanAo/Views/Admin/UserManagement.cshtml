@@ -1,0 +1,270 @@
+﻿
+@{
+    ViewBag.Title = "UserManagement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Admin Section Begin -->
+<section class="admin-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="admin-title">Quản lý tài khoản</h2>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
+
+                @Html.AntiForgeryToken()
+
+                <div class="admin-table">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Mã User</th>
+                                <th>Tên đăng nhập</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Điện thoại</th>
+                                <th>Vai trò</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td>@user.MaUser</td>
+                                    <td>@user.TenDangNhap</td>
+                                    <td>@user.HoTen</td>
+                                    <td>@user.Email</td>
+                                    <td>@user.DienThoai</td>
+                                    <td>
+                                        <span class="badge @(user.VaiTro == "Admin" ? "badge-danger" : "badge-primary")">
+                                            @user.VaiTro
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="@Url.Action("Edit", "Admin", new { id = user.MaUser })" class="btn btn-sm btn-primary">
+                                                <i class="fa fa-edit"></i> Sửa
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-warning btn-reset-password" data-id="@user.MaUser">
+                                                <i class="fa fa-key"></i> Reset MK
+                                            </button>
+                                            <select class="form-control form-control-sm d-inline-block w-auto ml-2 change-role" data-id="@user.MaUser" style="display: inline-block; width: auto;">
+                                                <option value="KhachHang" @(user.VaiTro == "KhachHang" ? "selected" : "")>Khách hàng</option>
+                                                <option value="Admin" @(user.VaiTro == "Admin" ? "selected" : "")>Admin</option>
+                                            </select>
+                                            @if (user.MaUser != (int)Session["MaUser"])
+                                            {
+                                                <button type="button" class="btn btn-sm btn-danger btn-delete" data-id="@user.MaUser" data-name="@user.TenDangNhap">
+                                                    <i class="fa fa-trash"></i> Xóa
+                                                </button>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .admin-section {
+        padding-top: 80px;
+        padding-bottom: 60px;
+    }
+
+    .admin-title {
+        font-size: 28px;
+        font-family: 'Muli', sans-serif;
+        color: #252525;
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+
+    .admin-table {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+        .admin-table table {
+            width: 100%;
+            font-family: 'Muli', sans-serif;
+        }
+
+        .admin-table thead tr th {
+            background-color: #f5f5f5;
+            font-weight: 700;
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #ebebeb;
+        }
+
+        .admin-table tbody tr td {
+            padding: 12px;
+            border: 1px solid #ebebeb;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+    .action-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+        .action-buttons .btn {
+            font-family: 'Muli', sans-serif;
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+
+    .badge {
+        padding: 5px 10px;
+        border-radius: 3px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .badge-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .change-role {
+        font-size: 12px;
+        padding: 3px 8px;
+        height: auto;
+    }
+</style>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Xử lý xóa tài khoản
+            $('.btn-delete').on('click', function () {
+                var userId = $(this).data('id');
+                var userName = $(this).data('name');
+
+                if (confirm('Bạn có chắc chắn muốn xóa tài khoản "' + userName + '" không?')) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Admin")',
+                        type: 'POST',
+                        data: {
+                            id: userId,
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        headers: {
+                            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                alert(response.message);
+                                location.reload();
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi xóa tài khoản!');
+                        }
+                    });
+                }
+            });
+
+            // Xử lý reset mật khẩu
+            $('.btn-reset-password').on('click', function () {
+                var userId = $(this).data('id');
+
+                if (confirm('Bạn có chắc chắn muốn reset mật khẩu cho tài khoản này không? Mật khẩu mới sẽ là: 123456')) {
+                    $.ajax({
+                        url: '@Url.Action("ResetPassword", "Admin")',
+                        type: 'POST',
+                        data: {
+                            id: userId,
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        headers: {
+                            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                alert(response.message);
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi reset mật khẩu!');
+                        }
+                    });
+                }
+            });
+
+            // Xử lý thay đổi quyền
+            $('.change-role').on('change', function () {
+                var userId = $(this).data('id');
+                var newRole = $(this).val();
+                var oldRole = $(this).find('option:not(:selected)').filter(function() {
+                    return $(this).val() != newRole;
+                }).first().val();
+
+                if (confirm('Bạn có chắc chắn muốn thay đổi quyền của tài khoản này thành "' + newRole + '" không?')) {
+                    $.ajax({
+                        url: '@Url.Action("ChangeRole", "Admin")',
+                        type: 'POST',
+                        data: {
+                            id: userId,
+                            vaiTro: newRole,
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        headers: {
+                            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                alert(response.message);
+                                location.reload();
+                            } else {
+                                alert(response.message);
+                                // Khôi phục lại giá trị cũ
+                                $('.change-role[data-id="' + userId + '"]').val(oldRole);
+                            }
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi thay đổi quyền!');
+                            // Khôi phục lại giá trị cũ
+                            $('.change-role[data-id="' + userId + '"]').val(oldRole);
+                        }
+                    });
+                } else {
+                    // Khôi phục lại giá trị cũ nếu hủy
+                    $(this).val(oldRole);
+                }
+            });
+        });
+    </script>
+    }

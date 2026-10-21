@@ -1,0 +1,59 @@
+﻿@model List<ShopQuanAo.Models.QuanAo>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<section class="man-banner spad">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="filter-control">
+                    <ul>
+                        <li class="active">Quần áo</li>
+                        <li>Túi xách tay</li>
+                        <li>Giày</li>
+                        <li>Phụ kiện</li>
+                    </ul>
+                </div>
+                <div class="product-slider owl-carousel">
+                    @foreach (var item in Model)
+                     { 
+                <div class="product-item">
+                    <div class="pi-pic">
+                        <img src="~/Content/img/@(
+    item.HinhAnh.Contains("/")
+        ? item.HinhAnh
+        : "QuanAo/" + item.HinhAnh
+)" alt="@item.TenQuanAo" />
+                        <div class="sale">Sale</div>
+                        <div class="icon">
+                            <i class="icon_heart_alt"></i>
+                        </div>
+                        <ul>
+                            <li class="w-icon active"><a href="#"><i class="icon_bag_alt"></i></a></li>
+                            <li class="quick-view"><a href="@Url.Action("Index","ChiTiet", new {id = item.MaQuanAo})">+ Xem nhanh</a></li>
+                            <li class="w-icon"><a href="#"><i class="fa fa-random"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="pi-text">
+                        <div class="catagory-name">@item.TheLoai.TenTheLoai</div>
+                        <a href="#">
+                            <h5>@item.TenQuanAo</h5>
+                        </a>
+                        <div class="product-price">
+                            @String.Format("{0:N0} đ", item.Gia)
+                            <span>@String.Format("{0:N0} đ", item.Gia + 100000)</span>
+                        </div>
+                    </div>
+                </div>
+                     }
+                </div>
+            </div>
+            <div class="col-lg-3 offset-lg-1">
+                <div class="product-large set-bg m-large" data-setbg="/content/img/products/man-large.jpg">
+                    <h2>Thời trang nam</h2>
+                    <a href="#">Khám phá thêm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

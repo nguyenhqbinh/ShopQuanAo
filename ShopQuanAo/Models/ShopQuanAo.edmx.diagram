@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="39ece02bc8eb41adafc32dd4c02ef874" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="ShopQuanAoModel.ChiTietDonHang" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopQuanAoModel.DonHang" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopQuanAoModel.KhachHang" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopQuanAoModel.QuanAo" Width="1.5" PointX="8.375" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopQuanAoModel.sysdiagram" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopQuanAoModel.TheLoai" Width="1.5" PointX="6.125" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopQuanAoModel.User" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <AssociationConnector Association="ShopQuanAoModel.FK_CTDH_DonHang" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopQuanAoModel.FK_CTDH_QuanAo" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopQuanAoModel.FK_DonHang_KhachHang" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopQuanAoModel.FK_DonHang_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopQuanAoModel.FK_QuanAo_TheLoai" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
